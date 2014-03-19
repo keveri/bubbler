@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+require "bubbler"
+require "bubbler/default_template"
+require "bubbler/example_config"
+require "json"
+require "slop"
+
+opts = Slop.parse(help: true) do
+  banner "Creates bubble chart of file line counts.\nUsage: bubbler [options]"
+  on :c, :config=, "Config file path (default: ./config.json)"
+  on :f, :format=, "Output format (default is file). Choices: html, json"
+  on :e, :examples=, "Generates example files: config.json, default.mustache", argument: :optional
+end
+
+
+def arguments config_path
+  config = JSON.load( IO.read(config_path) )
+  template = IO.read(config["template"]) if File.exists?(config["template"])
+  template ||= "default"
+  { config: config, template: template }
+end
+
+def create_data config_path, opts
+  args = arguments(config_path)
+  case opts[:format]
+  when "json"
+    STDOUT.write Bubbler.json(args)
+  when "html"
+    STDOUT.write Bubbler.html(args)
+  else
+    Bubbler.create_html_file(args)
+    puts "index.html file created into current directory."
+  end
+end
+
+def create_examples
+  File.write("example_config.json", EXAMPLE_CONFIG)
+  File.write("default_template.mustache", DEFAULT_TEMPLATE)
+end
+
+if opts.help?
+  puts opts
+elsif opts.examples?
+  create_examples
+  puts "Example files created into current directory."
+else
+  config_path = opts[:config].nil? ? "config.json" : opts[:config]
+  if !File.exists?(config_path)
+    puts "Invalid config file path!"
+  else
+    create_data(config_path, opts)
+  end
+end
