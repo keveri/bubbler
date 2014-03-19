@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/keveri/bubbler.png?branch=master)](http://travis-ci.org/keveri/bubbler)
+
 # Bubbler
 
 TODO: Write a gem description
