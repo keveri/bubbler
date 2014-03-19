@@ -1,3 +1,4 @@
+[![Dependency Status](https://gemnasium.com/keveri/bubbler.png)](https://gemnasium.com/keveri/bubbler)
 [![Build Status](https://secure.travis-ci.org/keveri/bubbler.png?branch=master)](http://travis-ci.org/keveri/bubbler)
 
 # Bubbler
